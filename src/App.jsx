@@ -1,10 +1,11 @@
-import React from 'react';
-
+// Main App component
 function App() {
   return (
-    <div>
-      <h1>Hello, World!</h1>
-    </div>
+      <div className="content" style={{ marginLeft: "260px", padding: "20px" }}>
+        <h1 className="text-3xl font-bold underline flex justify-center items-center min-h-screen">
+        Hello world!
+        </h1>  
+      </div>
   );
 }
 
