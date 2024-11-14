@@ -1,103 +1,88 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Sidebar } from "flowbite-react";
-import { SiDropbox } from "react-icons/si";
-import { FaBoxOpen } from "react-icons/fa";
-import { HiTruck, HiChip, HiCloud, HiArchive, HiCurrencyDollar, HiGift , HiUser, HiUserGroup, HiTrash, HiChevronDown, HiOutlineTrash } from "react-icons/hi";
-import Logo from "../assets/ewhale.svg"; 
+import Logo from "../assets/ewhale.svg";
 
 const customTheme = {
   root: {
-    inner: 'h-full overflow-y-auto overflow-x-hidden bg-white-1000 px-3 py-4'
-  }
+    inner: "h-full overflow-y-auto overflow-x-hidden bg-[#005B96] text-white px-4 py-6",
+  },
+  item: {
+    base: "text-white",
+    active: "bg-[#005B96] text-white",
+  },
 };
 
 export default function CustomSidebar() {
-  const [openItems, setOpenItems] = useState(() => {
-    const storedState = localStorage.getItem('sidebarState');
-    return storedState ? JSON.parse(storedState) : { approval: false, ewaste: false };
+  const [openSections, setOpenSections] = useState({
+    registrasi: false,
+    datamaster: false,
+    penjemputan: false,
   });
 
-  const toggleItem = (item) => {
-    setOpenItems((prev) => {
-      const newState = { ...prev, [item]: !prev[item] };
-      localStorage.setItem('sidebarState', JSON.stringify(newState));
-      return newState;
-    });
+  const toggleSection = (section) => {
+    setOpenSections((prev) => ({
+      ...prev,
+      [section]: !prev[section],
+    }));
   };
 
-  useEffect(() => {
-    return () => {
-      localStorage.removeItem('sidebarState');
-    };
-  }, []);
-
   return (
-    <Sidebar aria-label="Sidebar dengan logo" className="bg-white" theme={customTheme}>
-      <Sidebar.Logo href="#">
-        <img src={Logo} alt="E-WHALE Logo" className="w-32 h-24" />
-      </Sidebar.Logo>
+    <Sidebar aria-label="Sidebar with logo and sections" theme={customTheme}>
+     
+      <div className="bg-white flex justify-center items-center">
+        <img src={Logo} alt="E-WHALE Logo" className="w-28 h-20" />
+      </div>
+
       <Sidebar.Items>
         <Sidebar.ItemGroup>
-          {/* Title REGISTRASI */}
-          <h2 className="text-lg font-semibold my-2">REGISTRASI</h2>
+          {/* REGISTRASI Section */}
+          <h2 className="text-lg font-bold mt-4">REGISTRASI</h2>
           <Sidebar.Item
-            href="#"
-            icon={HiUser}
-            onClick={() => toggleItem('approval')}
-            className="flex items-center justify-between"
+            onClick={() => toggleSection("registrasi")}
+            className="cursor-pointer bg-transparent"
           >
-            <div className="flex items-center">
-              <span>Approval Registrasi</span>
-              <HiChevronDown className={`ml-2 transition-transform ${openItems.approval ? 'rotate-180' : ''}`} />
-            </div>
+            {openSections.registrasi ? "▲" : "▼"} Registrasi
           </Sidebar.Item>
-          {openItems.approval && (
+          {openSections.registrasi && (
             <Sidebar.ItemGroup className="pl-4">
-              <Sidebar.Item href="/register-masyarakat" icon={HiUserGroup}>
-                Registrasi Masyarakat
-              </Sidebar.Item>
-              <Sidebar.Item href="/register-kurir" icon={HiTruck}>
-                Registrasi Kurir
-              </Sidebar.Item>
+              <Sidebar.Item href="#">Approval Registrasi</Sidebar.Item>
+              <Sidebar.Item href="#">Registrasi Kurir</Sidebar.Item>
+              <Sidebar.Item href="#">Registrasi Masyarakat</Sidebar.Item>
             </Sidebar.ItemGroup>
           )}
 
-          {/* Title DATAMASTER */}
-          <h2 className="text-lg font-semibold my-2">DATAMASTER</h2>
+          {/* DATAMASTER Section */}
+          <h2 className="text-lg font-bold mt-4">DATAMASTER</h2>
           <Sidebar.Item
-            href="#"
-            icon={HiOutlineTrash}
-            onClick={() => toggleItem('ewaste')}
-            className="flex items-center justify-between"
+            onClick={() => toggleSection("datamaster")}
+            className="cursor-pointer bg-transparent"
           >
-            <div className="flex items-center">
-              <span>E-waste</span>
-              <HiChevronDown className={`ml-2 transition-transform ${openItems.ewaste ? 'rotate-180' : ''}`} />
-            </div>
+            {openSections.datamaster ? "▲" : "▼"} DataMaster
           </Sidebar.Item>
-          {openItems.ewaste && (
+          {openSections.datamaster && (
             <Sidebar.ItemGroup className="pl-4">
-              <Sidebar.Item href="/jenis-kategori" icon={HiChip}>
-                Jenis & Kategori
-              </Sidebar.Item>
-              <Sidebar.Item href="/konversi-poin" icon={HiCurrencyDollar}>
-                Konversi Poin
-              </Sidebar.Item>
+              <Sidebar.Item href="/">Dashboard</Sidebar.Item>
+              <Sidebar.Item href="E-WastePage">E-Waste</Sidebar.Item>
+              <Sidebar.Item href="dropbox">Dropbox</Sidebar.Item>
+              <Sidebar.Item href="AreaPage">Area</Sidebar.Item>
             </Sidebar.ItemGroup>
           )}
 
-          {/* Item Permintaan Sampah dan Penjemputan Sampah */}
-          <Sidebar.Item href="/permintaan-sampah" icon={HiTrash} className="mt-2">
-            Permintaan Sampah
+          {/* PENJEMPUTAN Section */}
+          <h2 className="text-lg font-bold mt-4">PENJEMPUTAN</h2>
+          <Sidebar.Item
+            onClick={() => toggleSection("penjemputan")}
+            className="cursor-pointer bg-transparent"
+          >
+            {openSections.penjemputan ? "▲" : "▼"} Penjemputan
           </Sidebar.Item>
-          <Sidebar.Item href="/daftar-penjemputan" icon={HiTruck} className="mt-2">
-            Daftar Penjemputan
-          </Sidebar.Item>
-          <Sidebar.Item href="/dropbox" icon={FaBoxOpen} className="mt-2">
-            Dropbox
-          </Sidebar.Item>
+          {openSections.penjemputan && (
+            <Sidebar.ItemGroup className="pl-4">
+              <Sidebar.Item href="history-penjemputan">History Penjemputan</Sidebar.Item>
+            </Sidebar.ItemGroup>
+          )}
         </Sidebar.ItemGroup>
       </Sidebar.Items>
     </Sidebar>
