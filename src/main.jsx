@@ -1,18 +1,21 @@
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import App from './App.jsx';
-import Dashboard from './pages/DashboardPage.jsx';
+import App from "./App.jsx";
+import Dashboard from "./pages/DashboardPage.jsx";
+import Register from "./pages/RegisterPage.jsx";
+import Login from "./pages/LoginPage.jsx";
+import Forgot from "./pages/ForgotPage.jsx";
+import RegisterUser from "./pages/RegisterUserPage.jsx";
+import RegisterKurir from "./pages/RegisterKurirPage.jsx";
+import PermintaanSampah from "./pages/PermintaanSampah.jsx";
+import DaftarPenjemputan from "./pages/DaftarPenjemputan.jsx";
+import KonversiPoin from "./pages/KonversiPoin.jsx";
+import JenisKategori from "./pages/JenisKategoriPage.jsx";
+import Dropbox from "./pages/DropboxPage.jsx";
+import "./style/index.css";
 import EWastePage from './pages/E-WastePage.jsx';
-import Register from './pages/RegisterPage.jsx';
-import RegisterKurir from './pages/RegisterKurirPage.jsx';
-import PermintaanSampah from './pages/PermintaanSampah.jsx';
-import DaftarPenjemputan from './pages/DaftarPenjemputan.jsx';
-import KonversiPoin from './pages/KonversiPoin.jsx';
-import JenisKategori from './pages/JenisKategoriPage.jsx';
-import Dropbox from './pages/DropboxPage.jsx';
 import Area from './pages/AreaPage.jsx';
 import HistoryPenjemputanPage from './pages/HistoryPenjemputanPage.jsx'; // Import the new page
-import './style/index.css';
 
 const router = createBrowserRouter([
   {
@@ -28,8 +31,20 @@ const router = createBrowserRouter([
     element: <App />,
   },
   {
-    path: "/register-masyarakat",
+    path: "/register",
     element: <Register />,
+  },
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/forgot",
+    element: <Forgot />,
+  },
+  {
+    path: "/register-user",
+    element: <RegisterUser />,
   },
   {
     path: "/register-kurir",
@@ -54,15 +69,7 @@ const router = createBrowserRouter([
   {
     path: "/dropbox",
     element: <Dropbox />,
-  },
-  {
-    path: "/AreaPage",
-    element: <Area />,
-  },
-  {
-    path: "/history-penjemputan", // New path for History Penjemputan
-    element: <HistoryPenjemputanPage />,
-  },
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
