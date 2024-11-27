@@ -13,11 +13,18 @@ import KonversiPoin from "./pages/KonversiPoin.jsx";
 import JenisKategori from "./pages/JenisKategoriPage.jsx";
 import Dropbox from "./pages/DropboxPage.jsx";
 import "./style/index.css";
+import EWastePage from './pages/E-WastePage.jsx';
+import Area from './pages/AreaPage.jsx';
+import HistoryPenjemputanPage from './pages/HistoryPenjemputanPage.jsx'; // Import the new page
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Dashboard />,
+  },
+  {
+    path: "/E-WastePage",
+    element: <EWastePage />,
   },
   {
     path: "/test",
@@ -62,7 +69,9 @@ const router = createBrowserRouter([
   {
     path: "/dropbox",
     element: <Dropbox />,
-  },
+  }
 ]);
 
-ReactDOM.createRoot(document.getElementById("root")).render(<RouterProvider router={router} />);
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <RouterProvider router={router} />
+);
