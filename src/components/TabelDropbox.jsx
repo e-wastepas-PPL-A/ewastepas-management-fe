@@ -2,53 +2,158 @@
 
 import { HiPencil, HiTrash } from "react-icons/hi";
 import { Table } from "flowbite-react";
+import { useState } from "react";
+
+import React from 'react';
 
 export default function CustomTable() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   return (
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <Table className="w-full text-sm text-left text-gray-900">
-          <thead className="text-xs text-white uppercase" style={{ backgroundColor: '#106EBE', borderBottom: '2px solid #106EBE' }}>
-            <tr>
-              <th scope="col" className="px-4 py-2">
-                <input type="checkbox" />
-              </th>
-              <th scope="col" className="px-6 py-3">Nama</th>
-              <th scope="col" className="px-6 py-3">Alamat</th>
-              <th scope="col" className="px-6 py-3">Jenis Sampah Elektronik</th>
-              <th scope="col" className="px-6 py-3">Kategori Sampah Elektronik</th>
-              <th scope="col" className="px-6 py-3">Poin</th>
-              <th scope="col" className="px-6 py-3 text-center">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Array(10).fill().map((_, index) => (
-              <tr key={index} className="bg-white border-b hover:bg-blue-100">
-                <td className="py-2 px-4 text-center">
-                  <input type="checkbox" />
-                </td>
-                <td className="py-2 px-4">Nama</td>
-                <td className="py-2 px-4">Alamat</td>
-                <td className="py-2 px-4">Jenis Sampah</td>
-                <td className="py-2 px-4">Kategori</td>
-                <td className="py-2 px-4">Poin</td>
-                <td className="py-2 px-4 text-center flex items-center justify-center space-x-2">
-                  <button
-                    className="bg-green-600 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-green-700"
-                    title="Approve"
-                  >
-                    <HiPencil size={20} />
-                  </button>
-                  <button
-                    className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-red-700"
-                    title="Reject"
-                  >
-                    <HiTrash size={20} />
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
+          <table className="w-full text-sm text-left rtl:text-right text-blue-100 dark:text-blue-100">
+              <thead className="text-xs text-white uppercase" style={{ backgroundColor: '#106EBE', borderBottom: '2px solid #106EBE' }}>
+                  <tr>
+                      <th scope="col" class="px-6 py-3">
+                          ID Dropbox
+                      </th>
+                      <th scope="col" class="px-6 py-3">
+                          Alamat
+                      </th>
+                      <th scope="col" class="px-6 py-3">
+                          Kapasitas
+                      </th>
+                      <th scope="col" class="px-6 py-3">
+                          Total E-Waste
+                      </th>
+                      <th scope="col" class="px-6 py-3">
+                          Poin
+                      </th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr class="bg-white border-b border-grey hover:bg-blue-100">
+                      <th scope="row" class="px-6 py-4 font-medium text-black whitespace-nowrap dark:text-black">
+                          #123456
+                      </th>
+                      <td class="px-6 py-4 text-black">
+                          Kab. Bdg, Kec. Mar, Sayati
+                      </td>
+                      <td class="px-6 py-4 text-black">
+                          1000 Kw
+                      </td>
+                      <td class="px-6 py-4 text-black">
+                          400 Kw
+                      </td>
+                      <td class="px-6 py-4 text-black">
+                          999 Pts
+                      </td>
+                  </tr>
+                  <tr class="bg-white border-b border-grey hover:bg-blue-100">
+                      <th scope="row" class="px-6 py-4 font-medium text-black whitespace-nowrap dark:text-black">
+                          #123456
+                      </th>
+                      <td class="px-6 py-4 text-black">
+                          Kab. Bdg, Kec. Mar, Sayati
+                      </td>
+                      <td class="px-6 py-4 text-black">
+                          1000 Kw
+                      </td>
+                      <td class="px-6 py-4 text-black">
+                          400 Kw
+                      </td>
+                      <td class="px-6 py-4 text-black">
+                          999 Pts
+                      </td>
+                  </tr>
+                  <tr class="bg-white border-b border-grey hover:bg-blue-100">
+                      <th scope="row" class="px-6 py-4 font-medium text-black whitespace-nowrap dark:text-black">
+                          #123456
+                      </th>
+                      <td class="px-6 py-4 text-black">
+                          Kab. Bdg, Kec. Mar, Sayati
+                      </td>
+                      <td class="px-6 py-4 text-black">
+                          1000 Kw
+                      </td>
+                      <td class="px-6 py-4 text-black">
+                          400 Kw
+                      </td>
+                      <td class="px-6 py-4 text-black">
+                          999 Pts
+                      </td>
+                  </tr>
+                  <tr class="bg-white border-b border-grey hover:bg-blue-100">
+                      <th scope="row" class="px-6 py-4 font-medium text-black whitespace-nowrap dark:text-black">
+                          #123456
+                      </th>
+                      <td class="px-6 py-4 text-black">
+                          Kab. Bdg, Kec. Mar, Sayati
+                      </td>
+                      <td class="px-6 py-4 text-black">
+                          1000 Kw
+                      </td>
+                      <td class="px-6 py-4 text-black">
+                          400 Kw
+                      </td>
+                      <td class="px-6 py-4 text-black">
+                          999 Pts
+                      </td>
+                  </tr>
+                  <tr class="bg-white border-b border-grey hover:bg-blue-100">
+                      <th scope="row" class="px-6 py-4 font-medium text-black whitespace-nowrap dark:text-black">
+                          #123456
+                      </th>
+                      <td class="px-6 py-4 text-black">
+                          Kab. Bdg, Kec. Mar, Sayati
+                      </td>
+                      <td class="px-6 py-4 text-black">
+                          1000 Kw
+                      </td>
+                      <td class="px-6 py-4 text-black">
+                          400 Kw
+                      </td>
+                      <td class="px-6 py-4 text-black">
+                          999 Pts
+                      </td>
+                  </tr>
+                  <tr class="bg-white border-b border-grey hover:bg-blue-100">
+                      <th scope="row" class="px-6 py-4 font-medium text-black whitespace-nowrap dark:text-black">
+                          #123456
+                      </th>
+                      <td class="px-6 py-4 text-black">
+                          Kab. Bdg, Kec. Mar, Sayati
+                      </td>
+                      <td class="px-6 py-4 text-black">
+                          1000 Kw
+                      </td>
+                      <td class="px-6 py-4 text-black">
+                          400 Kw
+                      </td>
+                      <td class="px-6 py-4 text-black">
+                          999 Pts
+                      </td>
+                  </tr>
+                  <tr class="bg-white border-b border-grey hover:bg-blue-100">
+                      <th scope="row" class="px-6 py-4 font-medium text-black whitespace-nowrap dark:text-black">
+                          #123456
+                      </th>
+                      <td class="px-6 py-4 text-black">
+                          Kab. Bdg, Kec. Mar, Sayati
+                      </td>
+                      <td class="px-6 py-4 text-black">
+                          1000 Kw
+                      </td>
+                      <td class="px-6 py-4 text-black">
+                          400 Kw
+                      </td>
+                      <td class="px-6 py-4 text-black">
+                          999 Pts
+                      </td>
+                  </tr>
+              </tbody>
+          </table>
+          {isModalOpen && <CustomPopUp onClose={() => setIsModalOpen(false)} />}
       </div>
   );
 }
+
