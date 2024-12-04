@@ -69,6 +69,14 @@ const router = createBrowserRouter([
   {
     path: "/dropbox",
     element: <Dropbox />,
+  },
+  {
+    path: "/AreaPage",
+    element: <Area />,
+  },
+  {
+    path: "/history-penjemputan",
+    element: <HistoryPenjemputanPage />,
   }
 ]);
 
