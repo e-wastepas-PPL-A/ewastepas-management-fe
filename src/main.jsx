@@ -16,6 +16,7 @@ import "./style/index.css";
 import EWastePage from './pages/E-WastePage.jsx';
 import Area from './pages/AreaPage.jsx';
 import HistoryPenjemputanPage from './pages/HistoryPenjemputanPage.jsx'; // Import the new page
+import EditProfile from './pages/EditProfile.jsx';
 
 const router = createBrowserRouter([
   {
@@ -77,7 +78,12 @@ const router = createBrowserRouter([
   {
     path: "/history-penjemputan",
     element: <HistoryPenjemputanPage />,
-  }
+  },
+  {
+    path: "/EditProfile",
+    element: <EditProfile/>
+  },
+
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
