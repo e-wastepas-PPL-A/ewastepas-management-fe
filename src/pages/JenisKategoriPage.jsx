@@ -64,7 +64,7 @@ export function Sidebar1() {
               paddingRight: "20px",
             }}
           >
-            <h2 className="text-lg font-bold">Sampah Elektronik yang dapat dijemput</h2>
+            <h2 className="text-lg font-bold">Sampah Elektronik</h2>
           </div>
   
             <Card
@@ -73,12 +73,12 @@ export function Sidebar1() {
                 height: "600px"
                 }}
             >
-              {/* Button "Tambah Data" */}
+              {/* Button "Tambah Data"
               <div className="flex justify-between items-center mb-2">
                 <button className="bg-blue-600 text-white px-8 py-2 rounded-lg hover:bg-blue-700">
                   Tambah Data
                 </button>
-              </div>
+              </div> */}
   
               <CustomSearchbar style={{ marginRight: "sm-7" }}/>
               <CustomTabelJenisKategori/> 
