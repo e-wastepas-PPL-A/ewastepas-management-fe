@@ -17,6 +17,8 @@ import EWastePage from './pages/E-WastePage.jsx';
 import Area from './pages/AreaPage.jsx';
 import HistoryPenjemputanPage from './pages/HistoryPenjemputanPage.jsx'; // Import the new page
 import EditProfile from './pages/EditProfile.jsx';
+import KodeOTP from "./pages/VerificationPage.jsx";
+import GantiPassword from "./pages/ChangePasswordPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -81,8 +83,16 @@ const router = createBrowserRouter([
   },
   {
     path: "/EditProfile",
-    element: <EditProfile/>
+    element: <EditProfile/>,
   },
+  {
+    path:"/KodeOTP",
+    element:<KodeOTP/>,
+  },
+  {
+    path:"/GantiPW",
+    element:<GantiPassword/>,
+  }
 
 ]);
 

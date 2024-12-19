@@ -1,91 +1,93 @@
 import { useEffect, useState } from "react";
 import Logo from '../assets/logo.png';
-import Slide2 from '../assets/vertical-slide-2.png';
+import Slide2 from '../assets/forgot.png';
 import InputPassword from '../components/Input/InputPassword';
-import FooterBar from '../components/Register/FooterBar';
 import { changePassword } from "../services";
 
 export default function PageName() {
     const [token, setToken] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(null);
-    const [isLoading, setIsLoading] = useState(false); // State to manage loading
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        document.title = "E-Wastepas | Register";
+        document.title = "E-Wastepas | Reset Password";
         const urlParams = new URLSearchParams(window.location.search);
         setToken(urlParams.get('token'));
     }, []);
 
     const handleRegister = async () => {
         if (password !== confirmPassword) {
-            alert("Passwords do not match");
+            alert("Kata sandi tidak cocok!");
             return;
         }
-
-
-        const payload = {
-            new_password: password,
-            confirm_new_password: confirmPassword
-        };
-
-        setIsLoading(true); // Set loading state to true
+        setIsLoading(true);
 
         try {
-            const response = await changePassword(payload, token);
+            const response = await changePassword({ new_password: password, confirm_new_password: confirmPassword }, token);
             if (response.status === 200) {
-                setSuccess("Change password successful!");
+                alert("Kata sandi berhasil diubah!");
                 window.location.href = "/login";
-                setError(null);
             } else {
-                setError(response.response.data.error);
-                setSuccess(null);
+                alert("Gagal memperbarui kata sandi");
             }
-
         } catch {
-            setError("An error occurred during registration. Please try again.");
+            alert("Terjadi kesalahan, silakan coba lagi.");
         } finally {
-            setIsLoading(false); // Set loading state back to false
+            setIsLoading(false);
         }
     };
 
-    // Determine if the button should be disabled
-    const isButtonDisabled = !password || !confirmPassword || isLoading;
     return (
-        <div className="h-[100dvh] px-[8px] md:p-[100px] flex justify-center items-center">
-            <div className="w-1/2 md:p-[10px] lg:p-[52px] hidden lg:block">
-                <img src={Slide2} className="max-h-[90vh]" alt="Slide" />
-            </div>
-            <div className="text-center w-full lg:w-1/2">
-                <div className="flex justify-center">
-                    <img src={Logo} className="w-[340px]" alt="Logo" />
+        <div className="h-screen flex items-center justify-center">
+            {/* Container Utama */}
+            <div className="flex flex-col md:flex-row items-center justify-between w-full max-w-6xl ">
+                {/* Bagian Gambar */}
+                <div className="hidden md:block w-1/2">
+                    <img src={Slide2} alt="Forgot Password" className="w-3/4 h-auto object-cover" />
                 </div>
-                <div>
-                    <div className="text-start mb-[24px]">
-                        <h1 className="text-[40px] font-[600]">Ubah Kata Sandi</h1>
-                        <span className="text-[16px] font-[400] text-revamp-neutral-7">Kata sandi Anda yang sebelumnya telah direset. Silakan tetapkan kata sandi baru untuk akun Anda</span>
+
+                {/* Bagian Form */}
+                <div className="w-full md:w-1/2 px-12 py-16">
+                    {/* Logo */}
+                    <div className="text-center mb-8">
+                        <img src={Logo} alt="Logo" className="mx-auto w-52 mb-2" />
+                        <h2 className="text-3xl font-bold mt-2 text-gray-800">Atur Ulang Kata Sandi</h2>
                     </div>
-                    {error && <div className="text-white bg-revamp-error-300 py-[8px] mb-[18px] rounded-[6px]">{error}</div>}
-                    {success && <div className="text-white bg-revamp-success-300 py-[8px] mb-[18px] rounded-[6px]">{success}</div>}
-                    <div className="mb-[24px]">
-                        <InputPassword label={'Kata Sandi'} value={password} onChange={(e) => setPassword(e.target.value)} />
-                        <InputPassword label={'Konfirmasi Kata Sandi'} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+
+                    {/* Input Kata Sandi */}
+                    <div className="mb-6">
+                        <InputPassword
+                            label="Kata Sandi Baru"
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        />
                     </div>
-                    <div className="mb-[24px]">
-                        <button 
-                            className={`${isButtonDisabled ? 'bg-revampV2-neutral-400' : 'bg-revamp-secondary-500'} w-full py-[8px] text-white text-[14px] font-[600]`}
-                            onClick={handleRegister}
-                            disabled={isButtonDisabled} // Use the calculated disabled state
-                        >
-                            {isLoading ? 'Loading...' : 'Tetapkan Kata Sandi'} {/* Display loading text */}
-                        </button>
-                        <div className="flex justify-center items-center mt-[10px]">
-                            <span className="text-revamp-neutral-10 font-[500] text-[14px]">Anda sudah memiliki akun? <a href="/login" className="text-revamp-error-300">Login</a></span>
-                        </div>
+
+                    {/* Input Konfirmasi Kata Sandi */}
+                    <div className="mb-6">
+                        <InputPassword
+                            label="Konfirmasi Kata Sandi"
+                            type="password"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        />
+                        {password !== confirmPassword && confirmPassword && (
+                            <span className="text-red-500 text-sm">Kata sandi tidak cocok</span>
+                        )}
                     </div>
-                    <FooterBar />
+
+                    {/* Tombol Submit */}
+                    <button
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-md text-lg font-semibold transition duration-200"
+                        onClick={handleRegister}
+                        disabled={isLoading || !password || !confirmPassword}
+                    >
+                        {isLoading ? "Memproses..." : "Kirim"}
+                    </button>
                 </div>
             </div>
         </div>

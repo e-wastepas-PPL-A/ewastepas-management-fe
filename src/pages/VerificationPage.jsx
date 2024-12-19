@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import Logo from '../assets/logo.png';
-import Slide1 from '../assets/vertical-slide-1.png';
+import Slide1 from '../assets/Kodeotp.png';
 import IcBack from '../assets/ic-back.svg';
 import InputText from '../components/Input/InputText';
 import FooterBar from '../components/Register/FooterBar';
@@ -91,9 +91,8 @@ export default function PageName() {
                     </div>
                     <div className="mb-[24px]">
                         <button 
-                            className="bg-revamp-secondary-500 w-full py-[8px] text-white text-[14px] font-[600]" 
+                            className="bg-blue-600 w-full py-[10px] text-white text-[16px] font-[600] rounded" 
                             onClick={handleSendOtp}
-                            disabled={!otp}
                         >
                             Kirim
                         </button>
