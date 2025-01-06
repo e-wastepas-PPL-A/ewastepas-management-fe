@@ -15,7 +15,10 @@ import Dropbox from "./pages/DropboxPage.jsx";
 import "./style/index.css";
 import EWastePage from './pages/E-WastePage.jsx';
 import Area from './pages/AreaPage.jsx';
-import HistoryPenjemputanPage from './pages/HistoryPenjemputanPage.jsx'; // Import the new page
+import HistoryPenjemputanPage from './pages/HistoryPenjemputanPage.jsx';
+import VerificationPage from './pages/VerificationPage.jsx';
+import ChangePasswordPage from './pages/ChangePasswordPage.jsx';
+import EditProfilePage from './pages/EditProfilePage.jsx';
 
 const router = createBrowserRouter([
   {
@@ -23,7 +26,7 @@ const router = createBrowserRouter([
     element: <Dashboard />,
   },
   {
-    path: "/E-WastePage",
+    path: "/e-wastepage",
     element: <EWastePage />,
   },
   {
@@ -39,7 +42,7 @@ const router = createBrowserRouter([
     element: <Login />,
   },
   {
-    path: "/forgot",
+    path: "/forgot-password",
     element: <Forgot />,
   },
   {
@@ -71,12 +74,28 @@ const router = createBrowserRouter([
     element: <Dropbox />,
   },
   {
-    path: "/AreaPage",
+    path: "/areapage",
     element: <Area />,
   },
   {
     path: "/history-penjemputan",
     element: <HistoryPenjemputanPage />,
+  },
+  {
+    path: "/register/verification",
+    element: <VerificationPage />,
+  },
+  {
+    path: "/forgot-password/verification",
+    element: <VerificationPage />,
+  },
+  {
+    path: "forgot-password/change-password",
+    element: <ChangePasswordPage />,
+  },
+  {
+    path : "/ubah-profil",
+    element : <EditProfilePage />
   }
 ]);
 

@@ -25,7 +25,7 @@ const Sidebar = () => {
             </li>
             <li className="flex items-center cursor-pointer hover:text-blue-300">
               <FaTrashAlt className="mr-3" />
-              <Link to="/kategori-sampah">Kategori Sampah</Link>
+              <Link to="/jenis-kategori">Kategori Sampah</Link>
             </li>
           </ul>
         </div>
