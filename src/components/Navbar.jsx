@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Avatar, Dropdown, Navbar } from "flowbite-react";
 import { HiBell } from "react-icons/hi";
 import { logout } from "../services";
+import { useNavigate } from "react-router-dom"; // Gantilah dengan useNavigate dari react-router-dom
 
 export default function CustomNavbar() {
   const [user, setUser] = useState({
@@ -11,31 +12,19 @@ export default function CustomNavbar() {
     email: '',
     photo: null,
   });
-
-  useEffect(() => {
-    const handleStorageChange = () => {
-      const userFromStorage = JSON.parse(localStorage.getItem("user"));
-      if (userFromStorage) {
-        setUser(userFromStorage);
-      }
-    };
   
-    // Menambahkan event listener untuk perubahan localStorage
-    window.addEventListener('storage', handleStorageChange);
-  
-    return () => {
-      // Membersihkan event listener saat komponen di-unmount
-      window.removeEventListener('storage', handleStorageChange);
-    };
-  }, []);
-  
+  const navigate = useNavigate(); // Gunakan navigate dari react-router-dom
 
   useEffect(() => {
     const userFromStorage = JSON.parse(localStorage.getItem("user"));
-    if (userFromStorage) {
+    if (!userFromStorage) {
+      // Jika tidak ada data pengguna, arahkan ke halaman login
+      navigate("/login");
+    } else {
       setUser(userFromStorage);
     }
-  }, [localStorage.getItem("user")]);
+  }, [navigate]); // Pastikan hanya dijalankan sekali saat komponen pertama kali dimuat
+
   const photoUrl = typeof user.photo === "string"
     ? `http://localhost:8000/storage/${user.photo}`
     : "https://flowbite.com/docs/images/people/profile-picture-5.jpg";
@@ -57,7 +46,7 @@ export default function CustomNavbar() {
       });
 
       alert("Successfully logged out!");
-      window.location.href = "/login";
+      navigate("/login"); // Mengarahkan ke halaman login setelah logout
     } catch (error) {
       console.error(error.message);
       alert("Logout failed. Please try again.");
