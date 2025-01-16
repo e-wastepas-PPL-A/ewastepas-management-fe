@@ -141,4 +141,3 @@ export const updateProfile = async (formdata) => {
     throw error; 
   }
 };
-

@@ -150,7 +150,7 @@ export default function PageName() {
             <div>
               <label className="block text-gray-700 font-semibold mb-2">Tanggal Lahir</label>
               <DatePicker
-                selected={dateOfBirth}
+                selected={dateOfBirth || new Date()} // fallback to current date if null
                 onChange={(date) => setDateOfBirth(date)}
                 dateFormat="yyyy-MM-dd"
                 className="w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"

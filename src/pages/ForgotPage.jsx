@@ -41,7 +41,7 @@ export default function PageName() {
     return (
         <div className="h-[100dvh] px-[8px] md:p-[100px] flex justify-center items-center">
             <div className="w-1/2 md:p-[10px] lg:p-[52px] hidden lg:block">
-                <img src={Forgot} className="max-h-[90vh]" />
+                <img src={Slide1} className="max-h-[90vh]" />
             </div>
             <div className="text-center w-full lg:w-1/2 px-[8px]">
                 <div className="flex justify-center">

@@ -30,8 +30,6 @@ export default function PageName() {
   };
 
   const handleLogin = async () => {
-    if (!validateInputs()) return;
-
     const payload = {
       email: email,
       password: password,
@@ -47,7 +45,6 @@ export default function PageName() {
           email: response.data.email,
           photo: response.data.photo,
         }));
-        console.log(response.data);
         setShowSuccessPopup(true);
       } else if (response.data.error) {
         setError(response.data.error);
@@ -88,11 +85,13 @@ export default function PageName() {
     return password.length >= 8;
   };
 
+  const isButtonDisabled = !email || !password;
+
   return (
     <>
     <div className="h-[100dvh] px-[8px] md:p-[100px] flex justify-center items-center">
       <div className="w-1/2 md:p-[10px] lg:p-[52px] hidden lg:block">
-        <img src={glogin} className="max-h-[90vh]" alt="Gambar Besar" />
+        <img src={Slide1} className="max-h-[90vh]" alt="Slide" />
       </div>
       <div className="text-center w-full lg:w-1/2 px-[8px]">
         <div className="flex justify-center">
@@ -143,9 +142,9 @@ export default function PageName() {
             )}
             <div className="flex justify-center items-center mt-[10px]">
               <span className="text-revamp-neutral-10 font-[500] text-[14px]">
-                Belum Memiliki Akun?{" "}
+                Tidak memiliki akun?{" "}
                 <a href="/register" className="text-revamp-error-300">
-                  Daftar Disini
+                  Registrasi
                 </a>
               </span>
             </div>

@@ -9,9 +9,7 @@ import FooterBar from '../components/Register/FooterBar';
 import PopUpBerhasil from "../components/PopUpBerhasil";
 import PopUpGagal from "../components/PopUpGagal";
 import { registration, sendOtp } from "../services";
-import PopUpGagal from '../components/PopUpGagal';
-import PopUpBerhasil from '../components/PopUpBerhasil';
-
+import InputCheck from "../components/Input/InputCheck";
 
 export default function PageName() {
     const [name, setName] = useState('');

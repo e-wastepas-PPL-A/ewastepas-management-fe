@@ -36,7 +36,6 @@ const FooterBar = () => {
         <div className="flex justify-between items-center mb-[24px]">
             <span className="border border-revamp-neutral-7 border-1 w-full"></span>
             <span className="text-revamp-neutral-7 w-full">Atau daftar dengan</span>
-            <span className="text-revamp-neutral-7 w-full">Atau daftar dengan</span>
             <span className="border border-revamp-neutral-7 border-1 w-full"></span>
         </div>
         <div className="flex justify-center items-center cursor-pointer">
