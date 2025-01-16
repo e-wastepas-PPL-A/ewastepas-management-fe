@@ -15,7 +15,6 @@ import PopUpBerhasil from '../components/PopUpBerhasil';
 
 export default function PageName() {
     const [name, setName] = useState('');
-    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
@@ -31,7 +30,6 @@ export default function PageName() {
     const [confirmPasswordTouched, setConfirmPasswordTouched] = useState(false);
     const [showSuccessPopup, setShowSuccessPopup] = useState(false);
     const [showErrorPopup, setShowErrorPopup] = useState(false);
-
 
     useEffect(() => {
         document.title = "E-Wastepas | Register";
