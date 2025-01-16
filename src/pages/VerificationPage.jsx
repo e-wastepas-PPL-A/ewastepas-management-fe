@@ -42,6 +42,9 @@ export default function VerifyOtpPage() {
             setSuccess("OTP verified successfully!");
             setError(null);
             setShowSuccessPopup(true);
+          } else {
+            setError("OTP verification failed. Please try again.");
+            setShowErrorPopup(true);
           }
         } catch (error) {
           setError(error.data.message || "OTP verification failed. Please try again.");

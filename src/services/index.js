@@ -89,29 +89,45 @@ export const googleLogin = async () => {
 
 export const handleGoogleCallback = async (code) => {
   try {
-    const response = await axios.get(`${BASE_URL}/auth/google/callback?code=${code}`);
-    return response.data;
+    
+    const tokenResponse = await axios.post(`${BASE_URL}/auth/google/callback`, { code });
+
+    const { token } = tokenResponse.data;
+
+    localStorage.setItem("auth_token", token);
+
+    const userInfoResponse = await axios.get("https://www.googleapis.com/oauth2/v3/userinfo", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const user = userInfoResponse.data;
+    console.log("User Info:", user);
+
+    return user;
   } catch (error) {
     console.error("Google Callback Error:", error);
     throw error.response?.data || error.message;
   }
 };
 
-export async function getUsers() {
-  const token = Cookies.get('PHPSESSID');
-  return await axios
-    .get(`${BASE_URL}/profile`, {
+export async function getUsers(token) {
+  try {
+    const response = await axios.get(`${BASE_URL}/profile`, {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-    .catch((error) => {
-      return error;
+        Authorization: `Bearer ${token}`,
+      },
     });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching user:", error.response?.data || error.message);
+    throw error;
+  }
 }
 
 export const updateProfile = async (formdata) => {
-  const token = Cookies.get('PHPSESSID'); // Ambil token dari cookie
+  const token = Cookies.get('PHPSESSID'); 
   try {
     const response = await axios.post(`${BASE_URL}/profile-update`, formdata, {
       headers: {
@@ -119,10 +135,10 @@ export const updateProfile = async (formdata) => {
         'Content-Type': 'multipart/form-data',
       },
     });
-    return response; // Mengembalikan response dari server
+    return response; 
   } catch (error) {
     console.error('Error updating profile', error);
-    throw error; // Mengirimkan error jika terjadi masalah
+    throw error; 
   }
 };
 

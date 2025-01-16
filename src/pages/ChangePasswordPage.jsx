@@ -164,7 +164,6 @@ export default function PageName() {
                                 isButtonDisabled ? 'bg-[#005B96]' : 'bg-[#005B96]'
                             } w-full py-[8px] text-white text-[14px] font-[600] rounded-md`}
                             onClick={handlePasswordChange}
-                            disabled={isButtonDisabled}
                         >
                             {isLoading ? "Loading..." : "Ubah Kata Sandi"}
                         </button>

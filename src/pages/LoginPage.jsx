@@ -45,6 +45,7 @@ export default function PageName() {
           email: response.data.email,
           photo: response.data.photo,
         }));
+        console.log(response.data);
         setShowSuccessPopup(true);
       } else if (response.data.error) {
         setError(response.data.error);
@@ -119,8 +120,6 @@ export default function PageName() {
           />
           {passwordTouched && password.trim() === '' && <span className="text-red-500 text-sm flex">Kata Sandi Tidak Boleh Kosong</span>}
           {!validatePassword(password) && password && <span className="text-red-500 text-sm flex">Kata Sandi tidak valid</span>}
-          
-
             <div className="flex justify-between items-center">
               <InputCheck label={"Ingatkan Saya"} value={true} onChange={(e) => setPassword(e.target.value)} />
               <a href="/forgot-password" className="text-revamp-error-300 font-[500]">

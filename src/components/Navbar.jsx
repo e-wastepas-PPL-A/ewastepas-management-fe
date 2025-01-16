@@ -9,33 +9,47 @@ export default function CustomNavbar() {
   const [user, setUser] = useState({
     name: '',
     email: '',
-    photo: null, // Tambahkan property photo
+    photo: null,
   });
+
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user) {
-      setUser(user); // Memperbarui state profil dengan data terbaru dari localStorage
-    }
+    const handleStorageChange = () => {
+      const userFromStorage = JSON.parse(localStorage.getItem("user"));
+      if (userFromStorage) {
+        setUser(userFromStorage);
+      }
+    };
+  
+    // Menambahkan event listener untuk perubahan localStorage
+    window.addEventListener('storage', handleStorageChange);
+  
+    return () => {
+      // Membersihkan event listener saat komponen di-unmount
+      window.removeEventListener('storage', handleStorageChange);
+    };
   }, []);
+  
 
-  const photoUrl = typeof user.photo === "string" 
-  ? user.photo 
-  : "https://flowbite.com/docs/images/people/profile-picture-5.jpg";
-
+  useEffect(() => {
+    const userFromStorage = JSON.parse(localStorage.getItem("user"));
+    if (userFromStorage) {
+      setUser(userFromStorage);
+    }
+  }, [localStorage.getItem("user")]);
+  const photoUrl = typeof user.photo === "string"
+    ? `http://localhost:8000/storage/${user.photo}`
+    : "https://flowbite.com/docs/images/people/profile-picture-5.jpg";
 
   const handleLogout = async () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("No token found");
 
-      // Logout ke backend
       await logout(token);
 
-      // Hapus data dari localStorage
       localStorage.removeItem("token");
       localStorage.removeItem("user");
 
-      // Reset state user
       setUser({
         name: "",
         email: "",
@@ -63,15 +77,10 @@ export default function CustomNavbar() {
           inline
           label={
             <Avatar
-      alt="User settings"
-      img={
-        typeof user.photo === "string" 
-          ? user.photo 
-          : "https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-      }
-      rounded
-    />
-            
+              alt="User settings"
+              img={photoUrl}
+              rounded
+            />
           }
         >
           <Dropdown.Header>
