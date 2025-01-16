@@ -21,7 +21,7 @@ const Sidebar = () => {
           <ul>
             <li className="flex items-center mb-4 cursor-pointer hover:text-blue-300">
               <FaUserAlt className="mr-3" />
-              <Link to="/ubah-profil">Ubah Profil</Link>
+              <Link to="/editprofile">Ubah Profil</Link>
             </li>
             <li className="flex items-center cursor-pointer hover:text-blue-300">
               <FaTrashAlt className="mr-3" />

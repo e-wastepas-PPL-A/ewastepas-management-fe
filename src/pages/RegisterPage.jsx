@@ -5,13 +5,16 @@ import InputName from '../components/Input/InputName';
 import InputPhone from '../components/Input/InputPhone';
 import InputEmail from '../components/Input/InputEmail';
 import InputPassword from '../components/Input/InputPassword';
-import InputCheck from '../components/Input/InputCheck';
 import FooterBar from '../components/Register/FooterBar';
 import PopUpBerhasil from "../components/PopUpBerhasil";
 import PopUpGagal from "../components/PopUpGagal";
 import { registration, sendOtp } from "../services";
+import PopUpGagal from '../components/PopUpGagal';
+import PopUpBerhasil from '../components/PopUpBerhasil';
+
 
 export default function PageName() {
+    const [name, setName] = useState('');
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
@@ -52,10 +55,13 @@ export default function PageName() {
         if (password !== confirmPassword) {
             setError("Kata Sandi Tidak Cocok");
             setShowErrorPopup(true);
+            setError("Kata Sandi Tidak Cocok");
+            setShowErrorPopup(true);
             return;
         }
         if (!agreeToTerms) {
-            alert("You must agree to the terms and conditions");
+            setError("Anda harus menyetujui syarat dan ketentuan");
+            setShowErrorPopup(true);
             return;
         }
 
@@ -231,11 +237,21 @@ export default function PageName() {
                         >
                             {isLoading ? 'Loading...' : 'Buat Akun'}
                         </button>
-                        <div className="flex justify-center items-center mt-[10px]">
-                            <span className="text-revamp-neutral-10 font-[500] text-[14px]">Anda sudah memiliki akun? <a href="/login" className="text-revamp-error-300">Login</a></span>
-                        </div>
                     </div>
-                    <FooterBar />
+
+                    {/* Sudah Punya Akun */}
+                    <div className="text-center mt-4 text-sm">
+                        <span>
+                            Sudah Memiliki Akun?{" "}
+                            <a href="/login" className="text-blue-600 font-semibold">
+                                Masuk Disini
+                            </a>
+                        </span>
+                    </div>
+                    <br/>
+                    <div>
+                        <FooterBar/>
+                    </div>
                 </div>
             </div>
         </div>

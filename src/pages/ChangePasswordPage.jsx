@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import Logo from '../assets/logo.png';
 import Slide2 from '../assets/changePassword.png';
 import InputPassword from '../components/Input/InputPassword';
-import FooterBar from '../components/Register/FooterBar';
 import { changePassword } from "../services";
 import PopUpGagal from "../components/PopUpGagal";
 import PopUpBerhasil from "../components/PopUpBerhasil";
@@ -47,7 +46,7 @@ export default function PageName() {
         setIsLoading(true);
 
         try {
-            const response = await changePassword(payload, token);
+            const response = await changePassword({ new_password: password, confirm_new_password: confirmPassword }, token);
             if (response.status === 200) {
                 setSuccess("Kata sandi berhasil diubah!");
                 setError(null);
@@ -176,7 +175,15 @@ export default function PageName() {
                             </span>
                         </div>
                     </div>
-                    <FooterBar />
+
+                    {/* Tombol Submit */}
+                    <button
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-md text-lg font-semibold transition duration-200"
+                        onClick={handleRegister}
+                        disabled={isLoading || !password || !confirmPassword}
+                    >
+                        {isLoading ? "Memproses..." : "Kirim"}
+                    </button>
                 </div>
             </div>
         </div>
