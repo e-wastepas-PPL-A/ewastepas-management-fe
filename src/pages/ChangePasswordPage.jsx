@@ -1,95 +1,192 @@
 import { useEffect, useState } from "react";
 import Logo from '../assets/logo.png';
-import Slide2 from '../assets/forgot.png';
+import Slide2 from '../assets/changePassword.png';
 import InputPassword from '../components/Input/InputPassword';
+import FooterBar from '../components/Register/FooterBar';
 import { changePassword } from "../services";
+import PopUpGagal from "../components/PopUpGagal";
+import PopUpBerhasil from "../components/PopUpBerhasil";
 
 export default function PageName() {
-    const [token, setToken] = useState('');
     const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
+    const [passwordConfirm, setPasswordConfirm] = useState('');
+    const [error, setError] = useState(null);
+    const [success, setSuccess] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [passwordTouched, setPasswordTouched] = useState(false);
+    const [confirmPasswordTouched, setConfirmPasswordTouched] = useState(false);
+    const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+    const [showErrorPopup, setShowErrorPopup] = useState(false);
 
     useEffect(() => {
-        document.title = "E-Wastepas | Reset Password";
-        const urlParams = new URLSearchParams(window.location.search);
-        setToken(urlParams.get('token'));
+        document.title = "E-Wastepas | Change Password";
     }, []);
 
-    const handleRegister = async () => {
-        if (password !== confirmPassword) {
-            alert("Kata sandi tidak cocok!");
+    const handleClosePopup = () => {
+        setShowSuccessPopup(false);
+    };
+
+    const handlePasswordChange = async () => {
+        if (password !== passwordConfirm) {
+            setError("Kata sandi dan konfirmasi kata sandi tidak cocok.");
+            setShowErrorPopup(() => (true, 1500));
             return;
         }
+
+        const payload = {
+            password: password,
+            password_confirmation: passwordConfirm,
+        };
+
+        const token = localStorage.getItem('resetPasswordToken');
+        if (!token) {
+            setError("Token tidak ditemukan. Silakan coba lagi.");
+            return;
+        }
+
         setIsLoading(true);
 
         try {
-            const response = await changePassword({ new_password: password, confirm_new_password: confirmPassword }, token);
+            const response = await changePassword(payload, token);
             if (response.status === 200) {
-                alert("Kata sandi berhasil diubah!");
-                window.location.href = "/login";
-            } else {
-                alert("Gagal memperbarui kata sandi");
+                setSuccess("Kata sandi berhasil diubah!");
+                setError(null);
+                setShowSuccessPopup(() => (true, 1500));
+                // setTimeout(() => (window.location.href = "/login"), 1500);
             }
-        } catch {
-            alert("Terjadi kesalahan, silakan coba lagi.");
+        } catch (err) {
+            const errorMessage = err?.response?.data?.message || "Terjadi kesalahan saat mengubah kata sandi.";
+            setError(errorMessage);
         } finally {
             setIsLoading(false);
         }
     };
 
+    const validatePassword = (password) =>
+        validateMinLength(password) &&
+        validateUppercase(password) &&
+        validateNumber(password) &&
+        validateSpecialChar(password);
+
+    const validateMinLength = (password) => /.{8,}/.test(password);
+    const validateUppercase = (password) => /[A-Z]/.test(password);
+    const validateNumber = (password) => /[0-9]/.test(password);
+    const validateSpecialChar = (password) => /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+    const isPasswordValid = validatePassword(password);
+    const isConfirmPasswordValid = password === passwordConfirm;
+    const isButtonDisabled = !isPasswordValid || !isConfirmPasswordValid || isLoading;
+
     return (
-        <div className="h-screen flex items-center justify-center">
-            {/* Container Utama */}
-            <div className="flex flex-col md:flex-row items-center justify-between w-full max-w-6xl ">
-                {/* Bagian Gambar */}
-                <div className="hidden md:block w-1/2">
-                    <img src={Slide2} alt="Forgot Password" className="w-3/4 h-auto object-cover" />
+        <>
+        <div className="h-[100dvh] px-[8px] md:p-[100px] flex justify-center items-center">
+            <div className="w-1/2 md:p-[10px] lg:p-[52px] hidden lg:block">
+                <img src={Slide2} className="max-h-[90vh]" alt="Slide" />
+            </div>
+            <div className="text-center w-full lg:w-1/2">
+                <div className="flex justify-center">
+                    <img src={Logo} className="w-[340px]" alt="Logo" />
                 </div>
-
-                {/* Bagian Form */}
-                <div className="w-full md:w-1/2 px-12 py-16">
-                    {/* Logo */}
-                    <div className="text-center mb-8">
-                        <img src={Logo} alt="Logo" className="mx-auto w-52 mb-2" />
-                        <h2 className="text-3xl font-bold mt-2 text-gray-800">Atur Ulang Kata Sandi</h2>
+                <div>
+                    <div className="text-start mb-[24px]">
+                        <h1 className="text-[40px] font-[600]">Ubah Kata Sandi</h1>
+                        <span className="text-[16px] font-[400] text-revamp-neutral-7">
+                            Kata sandi Anda yang sebelumnya telah direset. Silakan tetapkan kata sandi baru untuk akun Anda.
+                        </span>
                     </div>
-
-                    {/* Input Kata Sandi */}
-                    <div className="mb-6">
+                    {error && (
+                        <div className="text-white bg-revamp-error-300 py-[8px] mb-[18px] rounded-[6px]">
+                            {error}
+                        </div>
+                    )}
+                    {success && (
+                        <div className="text-white bg-revamp-success-300 py-[8px] mb-[18px] rounded-[6px]">
+                            {success}
+                        </div>
+                    )}
+                    <div className="mb-[24px]">
                         <InputPassword
-                            label="Kata Sandi Baru"
-                            type="password"
+                            label="Kata Sandi"
                             value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                            onChange={(e) => {
+                                setPassword(e.target.value);
+                                setPasswordTouched(true);
+                            }}
+                            className={`border-b ${
+                                passwordTouched
+                                    ? isPasswordValid
+                                        ? "border-green-500"
+                                        : "border-red-500"
+                                    : "border-gray-300"
+                            } focus:outline-none`}
                         />
-                    </div>
-
-                    {/* Input Konfirmasi Kata Sandi */}
-                    <div className="mb-6">
+                        {passwordTouched && (
+                            <div className="text-sm mt-2 mb-5">
+                                <p className={`${validateMinLength(password) ? "text-green-500" : "text-red-500" } flex`}>
+                                    Minimal 8 karakter
+                                </p>
+                                <p className={`${validateUppercase(password) ? "text-green-500" : "text-red-500"} flex`}>
+                                    Minimal 1 huruf kapital
+                                </p>
+                                <p className={`${validateNumber(password) ? "text-green-500" : "text-red-500"} flex`}>
+                                    Minimal 1 angka
+                                </p>
+                                <p className={`${validateSpecialChar(password) ? "text-green-500" : "text-red-500"} flex`}>
+                                    Minimal 1 karakter unik
+                                </p>
+                            </div>
+                        )}
                         <InputPassword
                             label="Konfirmasi Kata Sandi"
-                            type="password"
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                            value={passwordConfirm}
+                            onChange={(e) => {
+                                setPasswordConfirm(e.target.value);
+                                setConfirmPasswordTouched(true);
+                            }}
+                            className={`border-b ${
+                                confirmPasswordTouched
+                                    ? isConfirmPasswordValid
+                                        ? "border-green-500"
+                                        : "border-red-500"
+                                    : "border-gray-300"
+                            } focus:outline-none`}
                         />
-                        {password !== confirmPassword && confirmPassword && (
-                            <span className="text-red-500 text-sm">Kata sandi tidak cocok</span>
+                        {confirmPasswordTouched && passwordConfirm.trim() === "" && (
+                            <span className="flex text-red-500 text-sm">Konfirmasi kata sandi tidak boleh kosong</span>
+                        )}
+                        {confirmPasswordTouched && !isConfirmPasswordValid && (
+                            <span className="flex text-red-500 text-sm">Kata sandi tidak cocok</span>
                         )}
                     </div>
-
-                    {/* Tombol Submit */}
-                    <button
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-md text-lg font-semibold transition duration-200"
-                        onClick={handleRegister}
-                        disabled={isLoading || !password || !confirmPassword}
-                    >
-                        {isLoading ? "Memproses..." : "Kirim"}
-                    </button>
+                    <div className="mb-[24px]">
+                        <button
+                            className={`${
+                                isButtonDisabled ? 'bg-[#005B96]' : 'bg-[#005B96]'
+                            } w-full py-[8px] text-white text-[14px] font-[600] rounded-md`}
+                            onClick={handlePasswordChange}
+                        >
+                            {isLoading ? "Loading..." : "Ubah Kata Sandi"}
+                        </button>
+                        <div className="flex justify-center items-center mt-[10px]">
+                            <span className="text-revamp-neutral-10 font-[500] text-[14px]">
+                                Anda sudah memiliki akun?{" "}
+                                <a href="/login" className="text-revamp-error-300">
+                                    Login
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                    <FooterBar />
                 </div>
             </div>
         </div>
+        <PopUpBerhasil 
+            isOpen={showSuccessPopup} 
+            onClose={handleClosePopup} 
+            title={"Kata sandi berhasil diubah!"} 
+            navigateTo={"/login"} 
+            />
+        <PopUpGagal isOpen={showErrorPopup} onClose={() => setShowErrorPopup(false)} />
+        </>
     );
 }

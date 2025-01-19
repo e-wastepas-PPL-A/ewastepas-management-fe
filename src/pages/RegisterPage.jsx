@@ -1,19 +1,20 @@
 import { useEffect, useState } from "react";
 import Logo from '../assets/logo.png';
-import GLogin from '../assets/glogin.png';
-import InputCheck from '../components/Input/InputCheck';
-import InputText from '../components/Input/InputText';
+import Slide2 from '../assets/login.png';
+import InputName from '../components/Input/InputName';
+import InputPhone from '../components/Input/InputPhone';
 import InputEmail from '../components/Input/InputEmail';
 import InputPassword from '../components/Input/InputPassword';
 import FooterBar from '../components/Register/FooterBar';
+import PopUpBerhasil from "../components/PopUpBerhasil";
+import PopUpGagal from "../components/PopUpGagal";
 import { registration, sendOtp } from "../services";
-import PopUpGagal from '../components/PopUpGagal';
-import PopUpBerhasil from '../components/PopUpBerhasil';
-
+import InputCheck from "../components/Input/InputCheck";
 
 export default function PageName() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [agreeToTerms, setAgreeToTerms] = useState(false);
@@ -22,6 +23,7 @@ export default function PageName() {
     const [isLoading, setIsLoading] = useState(false);
     const [nameTouched, setNameTouched] = useState(false);
     const [emailTouched, setEmailTouched] = useState(false);
+    const [phoneTouched, setPhoneTouched] = useState(false);
     const [passwordTouched, setPasswordTouched] = useState(false);
     const [confirmPasswordTouched, setConfirmPasswordTouched] = useState(false);
     const [showSuccessPopup, setShowSuccessPopup] = useState(false);
@@ -31,8 +33,12 @@ export default function PageName() {
         document.title = "E-Wastepas | Register";
     }, []);
 
+      const handleClosePopup = () => {
+        setShowSuccessPopup(false);
+      };
+
     const handleRegister = async () => {
-        if (!email || !password || !confirmPassword) {
+        if (!email || !password  || !confirmPassword) {
             setError("Kolom Tidak Boleh Kosong");
             setShowErrorPopup(true);
             return;
@@ -45,6 +51,8 @@ export default function PageName() {
         if (password !== confirmPassword) {
             setError("Kata Sandi Tidak Cocok");
             setShowErrorPopup(true);
+            setError("Kata Sandi Tidak Cocok");
+            setShowErrorPopup(true);
             return;
         }
         if (!agreeToTerms) {
@@ -54,28 +62,29 @@ export default function PageName() {
         }
 
         const payload = {
+            name,
             email,
-            password,
-            confirm_password: confirmPassword
+            phone,
+            password
         };
 
         setIsLoading(true);
-
         try {
             const response = await registration(payload);
             if (response.status === 201) {
                 setSuccess("Pendaftaran berhasil! Silakan periksa email Anda untuk memverifikasi akun.");
+                setEmail(email);
                 setShowSuccessPopup(true);
-                setError(null);
-            } else if (response.response.data.error === "Your account has not been verified") {
-                await sendOtp({ email });
-                setSuccess("Email verifikasi telah dikirim. Silakan periksa email Anda.");
+            } else if(response.response.data.error === "Your account has not been verified") {
+                sendOtp({email: email})
+                window.location.href = "/register/verification?email=" + email;
                 setShowSuccessPopup(true);
             } else {
                 setError(response.response.data.error);
+                setSuccess(null);
                 setShowErrorPopup(true);
             }
-        } catch {
+        } catch (err) {
             setError("Terjadi kesalahan saat pendaftaran. Silakan coba lagi.");
             setShowErrorPopup(true);
         } finally {
@@ -83,141 +92,146 @@ export default function PageName() {
         }
     };
 
-    // Fungsi untuk memvalidasi email
     const validateEmail = (email) => {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return re.test(String(email).toLowerCase());
     };
 
-    // Fungsi untuk memvalidasi nama
     const validateName = (name) => {
-        return name.trim().length > 0; // Memastikan nama tidak kosong
+        return name.trim().length > 0;
     };
+
+    const validatePhone = (phone) => {  
+        const re = /^[0-9]+$/;
+        return re.test(phone.trim());
+    };  
+    
+    const validatePassword = (password) => { return validateMinLength(password) && validateUppercase(password) && validateNumber(password) && validateSpecialChar(password); };
+    const validateMinLength = (password) => /.{8,}/.test(password); 
+    const validateUppercase = (password) => /[A-Z]/.test(password); 
+    const validateNumber = (password) => /[0-9]/.test(password); 
+    const validateSpecialChar = (password) => /[!@#$%^&*(),.?":{}|<>]/.test(password); 
+
+    const isPasswordValid = validatePassword(password);
+
+    const isConfirmPasswordValid = password === confirmPassword;
+
+    const isButtonDisabled = !name|| !email || !phone || !password || !confirmPassword || isLoading;
 
     return (
         <>
-            {/* PopUp untuk menampilkan error */}
-            <PopUpGagal isOpen={showErrorPopup} message={error} onClose={() => { setShowErrorPopup(false); setError(null); }} />
-            {/* PopUp untuk menampilkan success */}
-            <PopUpBerhasil isOpen={showSuccessPopup} message={success} onClose={() => { setShowSuccessPopup(false); setSuccess(null); }} />
-            <div className="h-[100dvh] flex flex-col lg:flex-row justify-between items-center">
-                {/* Bagian Gambar Kiri */}
-                <div className="w-full lg:w-1/2 flex justify-center p-4">
-                    <img src={GLogin} alt="Illustrasi" className="max-w-[90%] h-auto" />
+        <div className="h-[100dvh] px-[8px] md:p-[100px] flex justify-center items-center">
+            <div className="w-1/2 md:p-[10px] lg:p-[52px] hidden lg:block">
+                <img src={Slide2} className="max-h-[90vh]" alt="Slide" />
+            </div>
+            <div className="text-center w-full lg:w-1/2 h-[100dvh] px-[8px]">
+                <div className="flex justify-center">
+                    <img src={Logo} className="w-[340px]" alt="Logo" />
                 </div>
-
-                {/* Formulir Pendaftaran */}
-                <div className="w-full lg:w-1/2 px-6 lg:px-16 py-4">
-                    {/* Logo */}
-                    <div className="flex justify-center mb-4">
-                        <img src={Logo} alt="Logo E-Wastepas" className="w-60" />
+                <div>
+                    <div className="text-start mb-[24px]">
+                        <h1 className="text-[40px] font-[600]">Registrasi Management</h1>
+                        <span className="text-[16px] font-[400] text-revamp-neutral-7">Mari siapkan semuanya agar dapat mengakses akun Anda</span>
                     </div>
-
-                    {/* Judul */}
-                    <h1 className="text-3xl font-semibold text-center mb-2">Register Untuk Menjadi Manajemen Sampah</h1>
-
-                    {/* Input */}
-                    <div className="space-y-4 mt-4">
-                        <div className="flex flex-col">
-                            <InputText
-                                label="Nama Lengkap"
-                                value={name}
-                                onChange={(e) => {
+                    {error && <div className="text-white bg-revamp-error-300 py-[8px] mb-[18px] rounded-[6px]">{error}</div>}
+                    {success && <div className="text-white bg-revamp-success-300 py-[8px] mb-[18px] rounded-[6px]">{success}</div>}
+                    
+                        <div className="space-y-4 mt-4">
+                        <InputName label={'Nama'} value={name} onChange={(e) => {
                                     setName(e.target.value);
                                     setNameTouched(true);
-                                }}
-                                className={`border-b ${validateName(name) ? "border-gray-300" : "border-red-500"} focus:outline-none`}
-                            />
-                            {nameTouched && name.trim() === '' && <span className="text-red-500 text-sm">Kolom Tidak Boleh Kosong</span>}
-                        </div>
-                        <div className="flex flex-col">
-                            <InputEmail
-                                label="Email"
-                                value={email}
-                                onChange={(e) => {
+                                }}  className={`border-b ${validateName(name) ? "border-gray-300" : "border-red-500"} focus:outline-none`}
+                                />
+                                {nameTouched && name.trim() === '' && <span className="flex text-red-500 text-sm">Kolom Tidak Boleh Kosong</span>}
+                        <InputEmail label={'Email'} value={email} onChange={(e) => {
                                     setEmail(e.target.value);
                                     setEmailTouched(true);
-                                }}
-                                className={`border-b ${validateEmail(email) ? "border-gray-300" : "border-red-500"} focus:outline-none`}
-                            />
-                            {emailTouched && email.trim() === '' && <span className="text-red-500 text-sm">Kolom Tidak Boleh Kosong</span>}
-                            {!validateEmail(email) && email && <span className="text-red-500 text-sm">Email tidak valid</span>}
-                        </div>
+                                }}  className={`border-b ${validateEmail(email) ? "border-gray-300" : "border-red-500"} focus:outline-none`}
+                                />
+                                {emailTouched && email.trim() === '' && <span className="text-red-500 text-sm flex">Kolom Tidak Boleh Kosong</span>}
+                                {!validateEmail(email) && email && <span className="text-red-500 text-sm flex">Email tidak valid</span>}
+                        <InputPhone label={'Nomer Handphone'} value={phone} onChange={(e) => {
+                                    setPhone(e.target.value);
+                                    setPhoneTouched(true);
+                                }}  className={`border-b ${validatePhone(phone) ? "border-gray-300" : "border-red-500"} focus:outline-none`}
+                                />
+                                {phoneTouched && phone.trim() === '' && <span className="flex text-red-500 text-sm">Nomor Telpon Tidak Boleh Kosong</span>}
+                                {!validatePhone(phone) && phone && <span className="text-red-500 text-sm flex">Nomor Telpon tidak valid</span>}
+                        <InputPassword label={'Kata Sandi'} value={password} onChange={(e) => {
+                            setPassword(e.target.value);
+                            setPasswordTouched(true);
+                            }}
+                            className={`border-b ${
+                            passwordTouched
+                                ? isPasswordValid
+                                ? 'border-green-500'
+                                : 'border-red-500'
+                                : 'border-gray-300'
+                            } focus:outline-none`}/>
+                            
+                            {passwordTouched && (
+                                    <div className="text-sm mt-2">
+                                    <li
+                                        className={`${
+                                        validateMinLength(password) ? 'text-green-500' : 'text-red-500'
+                                        } flex `}
+                                    >
+                                        8 Karakter, Maksimal (20 karakter) 
+                                    </li>
+                                    <p
+                                        className={`${
+                                        validateUppercase(password) ? 'text-green-500' : 'text-red-500'
+                                        } flex `}
+                                    >
+                                        1 huruf kapital
+                                    </p>
+                                    <p
+                                        className={`${
+                                        validateNumber(password) ? 'text-green-500' : 'text-red-500'
+                                        } flex `}
+                                    >
+                                        1 angka
+                                    </p>
+                                    <p
+                                        className={`${
+                                        validateSpecialChar(password) ? 'text-green-500' : 'text-red-500'
+                                        } flex `}
+                                    >
+                                        1 karakter unik
+                                    </p>
+                                    </div>
+                                )}
 
-                        <div className="flex flex-col">
-                            <InputPassword
-                                label="Password"
-                                type="password"
-                                value={password}
-                                onChange={(e) => {
-                                    setPassword(e.target.value);
-                                    setPasswordTouched(true);
-                                }}
-                                className={`border-b ${password.length >= 8 ? "border-gray-300" : "border-red-500"} focus:outline-none`}
-                            />
-                            {passwordTouched && password.trim() === '' && <span className="text-red-500 text-sm">Kolom Tidak Boleh Kosong</span>}
-                        </div>
-
-                        <div className="text-sm mt-4">
-                        <p className="font-medium">Kata Sandi Anda Setidaknya harus memiliki:</p>
-                        <ul className="list-disc ml-5 mt-1 text-gray-600">
-                            <li className={password.length >= 8 ? "text-green-500" : "text-red-500"}>
-                                8 Karakter Maksimal (20 Karakter)
-                            </li>
-                            <li className={/[A-Z]/.test(password) ? "text-green-500" : "text-red-500"}>
-                                1 Huruf Kapital
-                            </li>
-                            <li className={/\d/.test(password) ? "text-green-500" : "text-red-500"}>
-                                1 Angka
-                            </li>
-                            <li className={/[!@#$%^&*]/.test(password) ? "text-green-500" : "text-red-500"}>
-                                1 Karakter Unik seperti (* # $ @ ! ?)
-                            </li>
-                        </ul>
-                    </div>
-
-                        <div className="flex flex-col">
-                            <InputPassword
-                                label="Konfirmasi Password"
-                                type="password"
-                                value={confirmPassword}
-                                onChange={(e) => {
+                        <InputPassword label={'Konfirmasi Kata Sandi'} value={confirmPassword} onChange={(e) => {
                                     setConfirmPassword(e.target.value);
                                     setConfirmPasswordTouched(true);
-                                }}
-                                className={`border-b ${password === confirmPassword ? "border-gray-300" : "border-red-500"} focus:outline-none`}
+                                }} className={`border-b ${
+                                    confirmPasswordTouched
+                                      ? isConfirmPasswordValid
+                                        ? 'border-gray-300'
+                                        : 'border-red-500'
+                                      : 'border-gray-300'
+                                  } focus:outline-none focus:ring-0 focus:border-none`}
+                                />
+                                {confirmPasswordTouched && confirmPassword.trim() === '' && <span className="flex text-red-500 text-sm">Kata Sandi Tidak Boleh Kosong</span>}
+                                {confirmPasswordTouched && confirmPassword.trim() !== '' && !isConfirmPasswordValid && (<span className="flex text-red-500 text-sm">Kata sandi tidak cocok</span> 
+                            )}
+
+                        <div className="flex justify-between items-start pb-[10px]">
+                            <InputCheck 
+                                label={<span>Saya menyetujui semua <a href="#" className="text-revamp-red-700 font-[500]">Syarat</a> dan <a href="#" className="text-revamp-red-700 font-[500]">Kebijakan Privasi</a></span>} 
+                                value={agreeToTerms} 
+                                onChange={(e) => setAgreeToTerms(e.target.checked)} 
                             />
-                            {confirmPasswordTouched && confirmPassword.trim() === '' && <span className="text-red-500 text-sm">Kolom Tidak Boleh Kosong</span>}
-                            {password !== confirmPassword && <span className="text-red-500 text-sm">Kata Sandi Tidak Cocok</span>}
                         </div>
                     </div>
-
-                    {/* Checkbox dan Tombol */}
-                    <div className="flex items-center space-x-2 mt-4">
-                        <InputCheck
-                            label={
-                                <span>
-                                    Saya menyetujui semua{" "}
-                                    <a href="#" className="text-blue-600 font-medium">
-                                        Syarat
-                                    </a>{" "}
-                                    dan{" "}
-                                    <a href="#" className="text-blue-600 font-medium">
-                                        Kebijakan Privasi
-                                    </a>
-                                </span>
-                            }
-                            value={agreeToTerms}
-                            onChange={(e) => setAgreeToTerms(e.target.checked)}
-                        />
-                    </div>
-
-                    <div className="mt-6">
-                        <button
-                            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded transition duration-200"
+                    <div className="mb-[24px]">
+                        <button 
+                            className={`${isButtonDisabled ? 'bg-[#005B96]' : 'bg-[#005B96]'} w-full py-[8px] text-white text-[14px] font-[600] rounded-md`}
                             onClick={handleRegister}
+                            disabled={isButtonDisabled}
                         >
-                            Daftar
+                            {isLoading ? 'Loading...' : 'Buat Akun'}
                         </button>
                     </div>
 
@@ -236,6 +250,18 @@ export default function PageName() {
                     </div>
                 </div>
             </div>
+        </div>
+        <PopUpBerhasil
+        isOpen={showSuccessPopup}
+        onClose={handleClosePopup}
+        title={"Akun anda berhasil di daftarkan, silahkan masuk."}
+        email={email}
+        navigateTo={`/register/verification?email=${email}`}
+        />
+        <PopUpGagal
+        isOpen={showErrorPopup}
+        onClose={() => setShowErrorPopup(false)}
+        />
         </>
     );
 }

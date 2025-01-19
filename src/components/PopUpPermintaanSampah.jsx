@@ -9,7 +9,7 @@ export default function CustomPopUp({ onClose }) {
 
   const handleClose = () => {
     setOpenModal(false);
-    onClose(); // Panggil fungsi onClose dari props
+    onClose();
   };
 
   return (
