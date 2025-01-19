@@ -3,7 +3,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 
-const BASE_URL = "http://localhost:8000/api";
+const BASE_URL = "http://103.41.247.216:8041/api";
 
 export async function login(payload) {
   return await axios.post(`${BASE_URL}/login`, payload).catch((error) => {
