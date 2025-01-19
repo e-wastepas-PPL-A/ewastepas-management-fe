@@ -26,8 +26,8 @@ export default function CustomNavbar() {
   }, [navigate]); // Pastikan hanya dijalankan sekali saat komponen pertama kali dimuat
 
   const photoUrl = typeof user.photo === "string"
-    ? `http://localhost:8000/storage/${user.photo}`
-    : "https://flowbite.com/docs/images/people/profile-picture-5.jpg";
+    ? `${user.photo}`
+    : "";
 
   const handleLogout = async () => {
     try {

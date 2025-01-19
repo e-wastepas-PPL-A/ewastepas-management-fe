@@ -76,6 +76,35 @@ export async function getCategories() {
     }
   })
 };
+
+export const getWastesByCategory = async (wasteTypeId) => {
+  const token = Cookies.get('PHPSESSID'); // Ambil token
+  if (!token) {
+    throw new Error("Token tidak ditemukan");
+  }
+
+  try {
+    const response = await axios.get(`${BASE_URL}/categories/${wasteTypeId}/wastes`, {
+      headers: {
+        Authorization: `Bearer ${token}`, // Sertakan token di header
+      },
+    });
+    console.log("API Response:", response); // Debugging
+    return response.data; // Kembalikan data
+  } catch (error) {
+    console.error("Error fetching wastes by category:", error);
+    if (error.response) {
+      console.error("Response data:", error.response.data); // Detail error dari server
+      console.error("Response status:", error.response.status);
+      console.error("Response headers:", error.response.headers);
+    } else if (error.request) {
+      console.error("No response received:", error.request);
+    } else {
+      console.error("Error:", error.message);
+    }
+    throw error;
+  }
+};
   
 export const googleLogin = async () => {
   try {

@@ -45,6 +45,7 @@ export default function PageName() {
           email: response.data.email,
           photo: response.data.photo,
         }));
+        console.log("hasil:",response);
         setShowSuccessPopup(true);
       } else if (response.data.error) {
         setError(response.data.error);

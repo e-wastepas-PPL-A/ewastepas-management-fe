@@ -13,18 +13,16 @@ export default function PageName() {
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
-  const [dateOfBirth, setDateOfBirth] = useState(null); // null untuk default
+  const [dateOfBirth, setDateOfBirth] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
   const [token, setToken] = useState('');
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
   const [isPopUpGagalOpen, setIsPopUpGagalOpen] = useState(false);
 
   useEffect(() => {
-    // Dapatkan token dari cookies
     const token = Cookies.get('PHPSESSID');
     setToken(token);
 
-    // Panggil API untuk mendapatkan data pengguna
     const fetchProfile = async () => {
       try {
         const response = await getUsers(token);
@@ -76,9 +74,9 @@ export default function PageName() {
         setPhone(response.data.management.phone);
         setDateOfBirth(new Date(response.data.management.date_of_birth));
         setProfileImage(response.data.photo_url);
-  
-        setIsPopUpOpen(true);
         localStorage.setItem("user", JSON.stringify(response.data.management));
+        setIsPopUpOpen(true);
+        
       } else {
         setIsPopUpGagalOpen(true);
         console.error("Gagal memperbarui profil:", response?.data?.message || 'Unknown error');
@@ -91,12 +89,6 @@ export default function PageName() {
 
   return (
     <div className="bg-gray-100 min-h-screen ">
-      <div style={{ position: "fixed", top: 0, left: 0, width: "260px", height: "100vh", backgroundColor: "#f8f9fa" }}>
-        <CustomSidebar />
-      </div>
-      <div style={{ position: "fixed", top: 0, left: "260px", right: 0, height: "60px", backgroundColor: "#343a40", color: "#fff", zIndex: 1000 }}>
-        <CustomNavbar />
-      </div>
       <div
         className="content"
         style={{
@@ -106,6 +98,13 @@ export default function PageName() {
           paddingTop: "100px",
         }}
       >
+      <div style={{ position: "fixed", top: 0, left: 0, width: "260px", height: "100vh", backgroundColor: "#f8f9fa" }}>
+        <CustomSidebar />
+      </div>
+      <div style={{ position: "fixed", top: 0, left: "260px", right: 0, height: "60px", backgroundColor: "#343a40", color: "#fff", zIndex: 1000 }}>
+        <CustomNavbar />
+      </div>
+      
         <h1 className="text-3xl font-bold mb-6">Ubah Profil</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-8">
           <div className="space-y-4">
@@ -150,7 +149,7 @@ export default function PageName() {
             <div>
               <label className="block text-gray-700 font-semibold mb-2">Tanggal Lahir</label>
               <DatePicker
-                selected={dateOfBirth || new Date()} // fallback to current date if null
+                selected={dateOfBirth || new Date()}
                 onChange={(date) => setDateOfBirth(date)}
                 dateFormat="yyyy-MM-dd"
                 className="w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
